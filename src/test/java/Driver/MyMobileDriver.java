@@ -28,5 +28,6 @@ public class MyMobileDriver{
     capabilities.setCapability(MobileCapabilityType.BROWSER_NAME,"Chrome");
     capabilities.setCapability("chromedriverExecutable","TestathonProj/chromedriver");
     return new AndroidDriver(new URL(appiumService.getUrl().toString()), capabilities);
+
   }
 }
