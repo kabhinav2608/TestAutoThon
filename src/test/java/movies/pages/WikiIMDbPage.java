@@ -35,6 +35,7 @@ public class WikiIMDbPage extends PageObject {
             if (threadInfo.getDo(movie).isMobile) {
                 url = url.replaceFirst("en", "en.m");
             }
+            System.out.println("here for " + movie);
             threadInfo.getDo(movie).getDriver().get(url);
             WebDriver driver = threadInfo.getDriver(movie);
 

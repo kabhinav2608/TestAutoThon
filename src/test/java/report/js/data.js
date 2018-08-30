@@ -1,4 +1,4 @@
 function getJSON() {
-	var JSON = {"Data":[{"wikipediaSnapshot":"imageNotAvailable.png","movieID":1,"imdbDirector":"Frank Miller, Robert Rodriguez, Quentin Tarantino","wikipediaDirector":"Frank Miller Robert Rodriguez Quentin Tarantino (special guest director)","wikipediaUrl":"https:\/\/en.wikipedia.org\/wiki\/Sin_City_(film)","imdbUrl":"https:\/\/www.omdbapi.com\/?t=Sin+City&plot=full&apikey=380de361","threadID":14,"imdbSnapshot":"imageNotAvailable.png","difference":"NAFrank Miller, Robert Rodriguez, Quentin Tarantino","startTime":1535612642559,"endTime":1535612645900,"platformName":"HTTP","movieName":"Sin City","status":"Fail"}]};
+	var JSON = {"Data":[{"wikipediaSnapshot":"imageNotAvailable.png","movieID":1,"imdbDirector":"Not Available","wikipediaDirector":"Not Available","wikipediaUrl":"No url found","imdbUrl":"IMDb Movie URL Not Found","threadID":26,"imdbSnapshot":"imageNotAvailable.png","difference":"NA","startTime":"08\/30\/2018 15:17:34","endTime":"08\/30\/2018 15:17:35","platformName":"HTTP","movieName":"Non-Existing","status":"Pass"}]};
 return JSON;
 };
