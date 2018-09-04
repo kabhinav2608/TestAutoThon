@@ -115,6 +115,12 @@
             <artifactId>joda-time</artifactId>
             <version>2.10</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.2</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -138,7 +144,7 @@
                         <webdriver.driver>provided</webdriver.driver>
                         <webdriver.timeouts.implicitlywait>5000</webdriver.timeouts.implicitlywait>
                         <webdriver.provided.type>mydriver</webdriver.provided.type>
-                        <webdriver.provided.mydriver>driver.MyChromeDriver</webdriver.provided.mydriver>
+                        <webdriver.provided.mydriver>Driver.MyChromeDriver</webdriver.provided.mydriver>
                         <thucydides.driver.capabilities>mydriver</thucydides.driver.capabilities>
                     </systemPropertyVariables>
                 </configuration>
