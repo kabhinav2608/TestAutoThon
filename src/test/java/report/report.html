@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>TestAthon Report</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <!--===============================================================================================-->
+    <!--===============================================================================================-->
+    <script type="text/javascript" src="js/data.js"></script>
+    <!--===============================================================================================-->
+    <style>
+#table1 {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+ tr:nth-child(even){background-color: #f2f2f2;}
+
+ tr:hover {background-color: #ddd;}
+
+ th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
+    </style>
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+<center><img src="https://stepinforum.org/testautothon/wp-content/uploads/2017/04/logo.png" width="350" height="80">
+</center>
+<div class="limiter">
+    <div><h3></h3></div>
+    <div class="container-table100">
+        <table id="table1">
+            <thead>
+            <tr>
+                <th>Movie ID</th>
+                <th>Movie Name</th>
+                <th>Wikipedia URL</th>
+                <th>Snapshot of Wikipedia</th>
+                <th>Wikipedia Director(s)</th>
+                <th>Imdb URL</th>
+                <th>Snapshot of Imdb</th>
+                <th>Imdb Director(s)</th>
+                <th>Name Difference(s)</th>
+                <th>Thread ID</th>
+                <th>Platform Name</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+            </tr>
+            <tr ng-repeat="x in Data">
+                <td>{{x.movieID}}</td>
+                <td>{{x.movieName}}</td>
+                <td><a href={{x.wikipediaUrl}}><b>{{x.movieName}}</b></a></td>
+                <td><a href={{x.wikipediaSnapshot}}><img src={{x.wikipediaSnapshot}} height='80' width='120'/></a></td>
+                <td>{{x.wikipediaDirector}}</td>
+                <td>{{x.imdbUrl}}</td>
+                <td><a href={{x.imdbSnapshot}}><img src={{x.imdbSnapshot}} height='80' width='120'/></a></td>
+                <td>{{x.imdbDirector}}</td>
+                <td>{{x.difference}}</td>
+                <td>{{x.threadID}}</td>
+                <td>{{x.platformName}}</td>
+                <td>{{x.startTime}}</td>
+                <td>{{x.endTime}}</td>
+            </tr>
+            </thead>
+        </table>
+    </div>
+
+
+    <!--===============================================================================================-->
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/bootstrap/js/popper.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <!-- // <script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script> -->
+    <script>
+	var app = angular.module("myApp", []);
+	app.controller("myCtrl", function($scope) {
+	$scope.Data = getJSON();
+	console.log($scope.Data);
+	$scope.Data = $scope.Data.Data;
+  			});
+
+
+    </script>
+    <!--===============================================================================================-->
+    <script src="js/main.js"></script>
+
+</body>
+</html>
