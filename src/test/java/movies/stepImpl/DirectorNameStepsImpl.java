@@ -11,6 +11,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 
 import static movies.steps.DirectorNamesSteps.threadInfo;
 
@@ -23,6 +24,7 @@ public class DirectorNameStepsImpl {
     public void extractDataFromImdb(String movie, String url){
 
       try {
+        if(url.startsWith("https://en.")){
         String imdburl = IMDB_URL+movie.replaceAll(" ","+")+"&plot=full&apikey=380de361";
         String response = httpHelper.doGetRequest(imdburl);
         JSONParser parser = new JSONParser();
@@ -30,6 +32,12 @@ public class DirectorNameStepsImpl {
         String director = (String) jsonObject.get("Director");
         threadInfo.getDo(movie).imdburl = imdburl;
         threadInfo.getDo(movie).imdbdirectornames = director.split(",");
+        }
+        {
+          String[] directorName = {"Not Available"};
+          threadInfo.getDo(movie).imdburl = "IMDb Movie URL Not Found";
+          threadInfo.getDo(movie).imdbdirectornames = directorName;
+        }
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -39,23 +47,17 @@ public class DirectorNameStepsImpl {
 
       try {
         StringBuffer stringBuffer = new StringBuffer();
+        if(wikiUrl.startsWith("https://en.")){
         Document document = Jsoup.connect(wikiUrl).get();
         Elements table= document.select("table[class=infobox vevent]");
         Elements tr = table.select("tr:nth-child(3)");
         Elements td = tr.select("td");
-/*        Elements div = td.select("div");
-        if(div!=null){
-          Elements ul = div.select("ul");
-          for (Element li:ul
-               ) {
-            stringBuffer.append(li.text());
-          }
-          System.out.println("---td.text---"+stringBuffer.toString());
+        threadInfo.getDo(movie).wikidirectornames = td.text().split(",");
         }
         else{
-          stringBuffer.append(td.text());
-          System.out.println("---td.text--"+td.text());}*/
-        threadInfo.getDo(movie).wikidirectornames = td.text().split(",");
+          String[] directorNameResult = {"Not Available"};
+          threadInfo.getDo(movie).wikidirectornames = directorNameResult;
+        }
       } catch (Exception e) {
         e.printStackTrace();
       }

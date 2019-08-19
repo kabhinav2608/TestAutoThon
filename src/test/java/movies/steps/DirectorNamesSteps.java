@@ -4,9 +4,8 @@ import configPackage.Config;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import movies.pages.GoogleSearchPage;
+import movies.pages.DirectorNameStepsImpl;
 import movies.pages.WikiIMDbPage;
-import movies.stepImpl.DirectorNameStepsImpl;
 import org.junit.Assert;
 import utils.Do;
 import utils.ImportData;
@@ -58,17 +57,39 @@ public class DirectorNamesSteps {
         {
           cls = DirectorNameStepsImpl.class;
           obj = cls.newInstance();
+
+          Method m = cls.getDeclaredMethod("extractDataFromWiki", params);
+
+          threadInfo.doMethods(obj, m).startThreads();
+          threadInfo.waitForThreadsToComplete();
+        }
+        else if(runmode.equals("hybrid"))
+        {
+            Class apicls = DirectorNameStepsImpl.class;
+            Object apiobj = apicls.newInstance();
+
+            Class uicls = WikiIMDbPage.class;
+            Object uiiobj = uicls.newInstance();
+
+            Method[] uimethods = new Method[1];
+            Method[] apimethods = new Method[1];
+
+            uimethods[0] = uicls.getDeclaredMethod("extractDataFromWiki", params);
+            apimethods[0] = apicls.getDeclaredMethod("extractDataFromWiki", params);
+
+            threadInfo.doMethods(uiiobj, apiobj, uimethods, apimethods).startThreads();
+            threadInfo.waitForThreadsToComplete();
         }
         else
         {
           cls = WikiIMDbPage.class;
           obj = cls.newInstance();
+
+          Method m = cls.getDeclaredMethod("extractDataFromWiki", params);
+
+          threadInfo.doMethods(obj, m).startThreads();
+          threadInfo.waitForThreadsToComplete();
         }
-
-        Method m = cls.getDeclaredMethod("extractDataFromWiki", params);
-
-        threadInfo.doMethods(obj, m).startThreads();
-        threadInfo.waitForThreadsToComplete();
 
 
     }
@@ -90,18 +111,37 @@ public class DirectorNamesSteps {
       {
         cls = DirectorNameStepsImpl.class;
         obj = cls.newInstance();
+
+        Method m = cls.getDeclaredMethod("extractDataFromImdb", params);
+        threadInfo.setNewMethods("movies.pages.DirectorNameStepsImpl", obj, m).startThreads();
+      }
+      else if(runmode.equals("hybrid"))
+      {
+          Class apicls = DirectorNameStepsImpl.class;
+          Object apiobj = apicls.newInstance();
+
+          Class uicls = WikiIMDbPage.class;
+          Object uiiobj = uicls.newInstance();
+
+          Method[] uimethods = new Method[1];
+          Method[] apimethods = new Method[1];
+
+          uimethods[0] = uicls.getDeclaredMethod("extractDataFromWiki", params);
+          apimethods[0] = apicls.getDeclaredMethod("extractDataFromWiki", params);
+
+          threadInfo.setNewMethods(uiiobj, apiobj, uimethods, apimethods).startThreads();
+          threadInfo.waitForThreadsToComplete();
       }
       else
       {
         cls = WikiIMDbPage.class;
         obj = cls.newInstance();
+
+        Method m = cls.getDeclaredMethod("extractDataFromImdb", params);
+        threadInfo.setNewMethods("movies.pages.DirectorNameStepsImpl", obj, m).startThreads();
       }
 
-
-      Method m = cls.getDeclaredMethod("extractDataFromImdb", params);
-
-        threadInfo.setNewMethods(obj, m).startThreads();
-        threadInfo.waitForThreadsToComplete();
+      threadInfo.waitForThreadsToComplete();
 
     }
 

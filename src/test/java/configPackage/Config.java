@@ -35,12 +35,16 @@ public final class Config {
     }
 
     public String getProperty(String keyname) throws IOException {
+        workingDir = System.getProperty("user.dir");
         String environmentFile = "/src/test/resources/environment.properties";
         InputStream propertyfileinputstream = new FileInputStream(workingDir+environmentFile);
+        System.out.println(workingDir+environmentFile);
         Properties prop = new Properties();
         prop.load(propertyfileinputstream);
 
-        if(prop.contains(keyname))
+
+
+        if(prop.containsKey(keyname))
         {
             String p = prop.getProperty(keyname).trim();
             propertyfileinputstream.close();
@@ -63,7 +67,8 @@ public final class Config {
                 count = 1;
             }
             return count;
-        } catch (IOException e) {
+        } catch (Exception e) {
+//            e.printStackTrace();
             return 0;
         }
     }
@@ -77,7 +82,8 @@ public final class Config {
                 count = 0;
             }
             return count;
-        } catch (IOException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return 0;
         }
     }

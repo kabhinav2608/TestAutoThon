@@ -86,32 +86,12 @@ public class ThreadInfo {
         ArrayList<String> movies = new ArrayList();
         movies.addAll(movieMap.keySet());
 
-        if(Config.runmode.equals("api"))
-        {
+        if (Config.runmode.equals("api")) {
             for (int i = 0; i < movies.size(); i++) {
                 createThread(movies.get(i), null, false, true, false);
             }
             return this;
-        }
-        else if(Config.runmode.equals("hybrid"))
-        {
-            for (int i = 0; i < movies.size(); i++) {
-                if (countmobiledrivers > 0) {
-                    createThread(movies.get(i), new MyMobileDriver().newMobileDriver(), true, false, false);
-                    countmobiledrivers--;
-                }
-                else if (countapis > 0) {
-                    createThread(movies.get(i), null, false, true, false);
-                    countapis--;
-                }
-                else {
-                    createThread(movies.get(i), new MyChromeDriver().newDriver(), false, false, true);
-                }
-            }
-            return this;
-        }
-        else
-        {
+        } else if (Config.runmode.equals("ui")) {
             for (int i = 0; i < movies.size(); i++) {
                 if (countmobiledrivers > 0) {
                     createThread(movies.get(i), new MyMobileDriver().newMobileDriver(), true, false, false);
@@ -122,7 +102,45 @@ public class ThreadInfo {
             }
             return this;
         }
+        throw new Exception("Incorrect doMethod called");
     }
+
+    public ThreadInfo doMethods(Object uiObject, Object apiObject, Method[] uiMethods, Method[] apiMethods) throws Exception {
+
+        this.methods = methods;
+        this.classObject = classObject;
+        ArrayList<String> movies = new ArrayList();
+        movies.addAll(movieMap.keySet());
+
+        if (Config.runmode.equals("hybrid")) {
+            for (int i = 0; i < movies.size(); i++) {
+                if (countmobiledrivers > 0) {
+
+                    this.methods = uiMethods;
+                    this.classObject = uiObject;
+
+                    createThread(movies.get(i), new MyMobileDriver().newMobileDriver(), true, false, false);
+                    countmobiledrivers--;
+                } else if (countapis > 0) {
+
+                    this.methods = apiMethods;
+                    this.classObject = apiObject;
+
+                    createThread(movies.get(i), null, false, true, false);
+                    countapis--;
+                } else {
+
+                    this.methods = uiMethods;
+                    this.classObject = uiObject;
+                    createThread(movies.get(i), new MyChromeDriver().newDriver(), false, false, true);
+                }
+            }
+            return this;
+        }
+        return this;
+
+    }
+
 
     public WebDriver getDriver(String moviename) throws Exception {
         for (int i = 0; i < movielist.size(); i++) {
@@ -134,17 +152,89 @@ public class ThreadInfo {
         throw new Exception("Driver not found for movie : " + moviename);
     }
 
-    public ThreadInfo setNewMethods(Object classObject, Method... methods) throws Exception {
+    public ThreadInfo setNewMethods(Object uiObject, Object apiObject, Method[] uiMethods, Method[] apiMethods) throws Exception {
+        threadlist = new ArrayList<>();
+        ArrayList<String> movies = new ArrayList();
+        movies.addAll(movieMap.keySet());
+
+        if (Config.runmode.equals("hybrid")) {
+            for (int i = 0; i < movies.size(); i++) {
+                if (countmobiledrivers > 0) {
+
+                    this.methods = uiMethods;
+                    this.classObject = uiObject;
+
+                    reinitThread(movies.get(i), getDriver(movies.get(i)), getDo(movies.get(i)));
+                    countmobiledrivers--;
+                } else if (countapis > 0) {
+
+                    this.methods = apiMethods;
+                    this.classObject = apiObject;
+
+                    reinitThread(movies.get(i), getDriver(movies.get(i)), getDo(movies.get(i)));
+                    countapis--;
+                } else {
+
+                    this.methods = uiMethods;
+                    this.classObject = uiObject;
+                    reinitThread(movies.get(i), getDriver(movies.get(i)), getDo(movies.get(i)));
+                }
+            }
+            return this;
+        }
+        return this;
+    }
+
+    public ThreadInfo setNewMethods(String apiClassName, Object classObject, Method... methods) throws Exception {
         threadlist = new ArrayList<>();
         this.methods = methods;
         this.classObject = classObject;
         ArrayList<String> movies = new ArrayList();
         movies.addAll(movieMap.keySet());
+
         for (int i = 0; i < movies.size(); i++) {
             reinitThread(movies.get(i), getDriver(movies.get(i)), getDo(movies.get(i)));
         }
         return this;
     }
+
+//
+//    if (Config.runmode.equals("hybrid")) {
+//        System.out.println("It came here");
+//        System.out.println(countmobiledrivers);
+//        System.out.println(countapis);
+//        for (int i = 0; i < movies.size(); i++) {
+//            if (countmobiledrivers > 0) {
+//                reinitThread(movies.get(i), getDriver(movies.get(i)), getDo(movies.get(i)));
+//                countmobiledrivers--;
+//            } else if (countapis > 0) {
+//
+//                Class cls = Class.forName(apiClassName);
+//                this.classObject = cls.newInstance();
+//
+//                Class[] params = new Class[2];
+//                params[0] = String.class;
+//                params[1] = String.class;
+//
+//                for (int j = 0; j < methods.length; j++) {
+//                    this.methods[j] = cls.getDeclaredMethod(methods[j].getName(), params);
+//                }
+//
+//                reinitThread(movies.get(i), getDriver(movies.get(i)), getDo(movies.get(i)));
+//                countapis--;
+//            } else {
+//                this.methods = methods;
+//                this.classObject = classObject;
+//                reinitThread(movies.get(i), getDriver(movies.get(i)), getDo(movies.get(i)));
+//            }
+//        }
+//        return this;
+//    } else {
+//
+//        return this;
+//    }
+
+
 
     public void waitForThreadsToComplete() {
         int count = threadlist.size();
@@ -161,8 +251,7 @@ public class ThreadInfo {
 
     public void quitAllDrivers() {
         for (int i = 0; i < driverlist.size(); i++) {
-            if(driverlist.get(i) != null)
-            {
+            if (driverlist.get(i) != null) {
                 driverlist.get(i).quit();
             }
         }

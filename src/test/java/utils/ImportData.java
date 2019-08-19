@@ -39,7 +39,7 @@ public class ImportData {
           movieName = csvCell[0];
         System.out.println("----moviename--" + movieName);
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("headless");
+        //chromeOptions.addArguments("headless");
         WebDriver driver = new ChromeDriver(chromeOptions);
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
